@@ -32,9 +32,9 @@ jobs:
 
       - name: "Save snapshot files"
         run: |
-          git config --global user.name "${BOT_AUTHOR_EMAIL}"
-          git config --global user.email "${BOT_AUTHOR_NAME}"
+          git config --global user.name $Env:BOT_AUTHOR_EMAIL
+          git config --global user.email $Env:BOT_AUTHOR_NAME
           git add ./data/
           git commit -m "save snapshot $(Get-Date -f 'yyyy-MM-dd')"
-          git push origin ${GITHUB_REF}
+          git push origin $Env:GITHUB_REF
 
