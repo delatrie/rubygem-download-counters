@@ -58,8 +58,8 @@ Function Append-Csv ($Path, $Rows)
     }
 }
 
-Append-Csv (Join-Path $OutputDirectory "packages.json") $PackageRows
-Append-Csv (Join-Path $OutputDirectory "versions.json") $VersionRows
+Append-Csv (Join-Path $OutputDirectory "packages.csv") $PackageRows
+Append-Csv (Join-Path $OutputDirectory "versions.csv") $VersionRows
 
 Write-Host "Saved $($PackageRows.Count) package snapshots."
 Write-Host "Saved $($VersionRows.Count) version snapshots."
