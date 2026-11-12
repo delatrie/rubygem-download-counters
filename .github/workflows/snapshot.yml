@@ -1,4 +1,4 @@
-name: CI
+name: Save new snapshot
 
 on:
   workflow_dispatch: {}
@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Run a one-line script
-        run: .\update.ps1
+        run: .\save-new-snapshot.ps1
 
       - name: Run a multi-line script
         run: |
-          Get-ChildItem ./downloads
+          Get-ChildItem ./data
