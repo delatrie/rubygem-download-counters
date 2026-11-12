@@ -1,7 +1,8 @@
 Param
 (
     [string[]] $Packages = @("rspec", "cucumber", "watir", "allure-cucumber", "allure-rspec"),
-    [string] $OutputDirectory = "./data"
+    [string] $OutputDirectory = "./data",
+    [int] $RetentionDays = 45
 )
 
 $ErrorActionPreference = "Stop"
@@ -43,18 +44,24 @@ ForEach ($Package in $Packages)
 
 Function Append-Csv ($Path, $Rows)
 {
-    If ($Rows.Count -eq 0)
-    {
-        Return
-    }
+    $Cutoff = [DateTimeOffset]::UtcNow.AddDays(-$RetentionDays)
 
-    If (Test-Path $Path)
+    $Existing = If (Test-Path $Path)
     {
-        $Rows | Export-Csv -Path $Path -Append -NoTypeInformation
+        @(Import-Csv -Path $Path | Where-Object {
+            [DateTimeOffset]::Parse($_.Timestamp, [CultureInfo]::InvariantCulture) -ge $Cutoff
+        })
     }
     Else
     {
-        $Rows | Export-Csv -Path $Path -NoTypeInformation
+        @()
+    }
+
+    $Combined = @($Existing) + @($Rows)
+
+    If ($Combined.Count -gt 0)
+    {
+        $Combined | Export-Csv -Path $Path -NoTypeInformation
     }
 }
 
